@@ -1,5 +1,6 @@
 package com.swifty.webapi.controller;
 
+import lombok.AllArgsConstructor;
 import com.swifty.webapi.dto.CustomerDTO;
 import com.swifty.webapi.model.Customer;
 import com.swifty.webapi.service.CustomerService;
@@ -10,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/customers")
 public class CustomerController {
 
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     @PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody CustomerDTO customerDTO) {

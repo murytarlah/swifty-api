@@ -31,11 +31,11 @@ public class OrderService {
         // Create Order
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
-        order.setCustomer(customer);
         order.setTotalAmount(orderDTO.getProducts().stream().mapToDouble(OrderItemDTO::getSubtotal).sum());
-
+        
         Order savedOrder = orderRepository.save(order);
-
+        
+        order.setCustomer(customer);
         // Create Order Items
         ArrayList<OrderItem> orderItems = createOrderItems(orderDTO.getProducts(), savedOrder);
 

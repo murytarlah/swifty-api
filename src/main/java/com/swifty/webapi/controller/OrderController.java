@@ -1,9 +1,9 @@
 package com.swifty.webapi.controller;
 
+import lombok.AllArgsConstructor;
 import com.swifty.webapi.dto.OrderRequestDTO;
 import com.swifty.webapi.dto.OrderResponseDTO;
 import com.swifty.webapi.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/orders")
 public class OrderController {
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
 
     @PostMapping
     public ResponseEntity<Object> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {

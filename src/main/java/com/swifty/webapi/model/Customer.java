@@ -1,6 +1,7 @@
 package com.swifty.webapi.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.*;
 
 @Entity
@@ -24,5 +25,8 @@ public class Customer {
 
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Order> orders;
 }
 

@@ -25,7 +25,7 @@ public class Order {
     // private Long customerId;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinColumn(referencedColumnName = "id", name = "customerId")
+    @JoinColumn(referencedColumnName = "id", name = "customer_id")
     private Customer customer;
 
     @CreationTimestamp
@@ -36,5 +36,6 @@ public class Order {
     private Double totalAmount;
 
     @Column(name = "orderItems")
+    @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
 }

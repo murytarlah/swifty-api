@@ -1,6 +1,7 @@
 package com.swifty.webapi.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+// import org.hibernate.annotations.JdbcTypeCode;
+// import org.hibernate.type.SqlTypes;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,22 +10,22 @@ import lombok.*;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor @Data
-@Table(name = "order_item")
+@AllArgsConstructor @Getter @Setter @ToString
+// @Table(name = "orderItem")
 public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    @JsonManagedReference
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "productId", nullable = false)
+    // @JdbcTypeCode(SqlTypes.JSON)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @JsonManagedReference
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "orderId", nullable = false)
+    // @JdbcTypeCode(SqlTypes.JSON)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     private Integer quantity;

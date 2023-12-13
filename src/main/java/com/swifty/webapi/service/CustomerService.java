@@ -3,6 +3,8 @@ package com.swifty.webapi.service;
 
 import org.springframework.stereotype.Service;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import com.swifty.webapi.repository.CustomerRepository;
 import com.swifty.webapi.model.Customer;
@@ -12,7 +14,7 @@ import com.swifty.webapi.dto.CustomerDTO;
 @Service
 @AllArgsConstructor
 public class CustomerService {
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
     public Customer createCustomer(CustomerDTO customerDTO) {
 

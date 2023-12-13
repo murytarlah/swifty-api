@@ -3,6 +3,8 @@ package com.swifty.webapi.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor @Data
@@ -20,5 +22,8 @@ public class Product {
     private Double price;
 
     private Integer stockQuantity;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderItem> orderItems;
 }
 

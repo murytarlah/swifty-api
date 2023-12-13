@@ -1,9 +1,9 @@
 package com.swifty.webapi.controller;
 
+import lombok.AllArgsConstructor;
 import com.swifty.webapi.dto.ProductDTO;
 import com.swifty.webapi.model.Product;
 import com.swifty.webapi.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/products")
 public class ProductController {
-    private ProductService productService;
+    private final ProductService productService;
 
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody ProductDTO productDTO) {
