@@ -1,8 +1,12 @@
 package com.swifty.webapi.service;
 
+import com.swifty.webapi.repository.OrderItemRepository;
 import org.springframework.stereotype.Service;
 import lombok.*;
 import com.swifty.webapi.repository.OrderRepository;
+
+import jakarta.transaction.Transactional;
+
 import com.swifty.webapi.dto.OrderRequestDTO;
 import com.swifty.webapi.dto.OrderResponseDTO;
 import com.swifty.webapi.model.Order;
@@ -22,45 +26,46 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemService orderItemService;
     private final CustomerService customerService;
-    private final ProductService productService;   
+    private final ProductService productService;
+    private final OrderItemRepository orderItemRepository;
 
-    public Object createOrder(OrderRequestDTO orderDTO) {
+    public OrderResponseDTO createOrder(OrderRequestDTO orderDTO) {
         // Get Customer
         Customer customer = customerService.getCustomer(orderDTO.getCustomerId());
+        List<OrderItem> orderItems = new ArrayList<>();
+        orderDTO.getProducts().forEach(orderItem -> {
+            Product product = productService.getProductById(orderItem.getProductId());
 
+            double subTotal = product.getPrice() * orderItem.getQuantity();
+            OrderItem newOrderItem = new OrderItem();
+
+            newOrderItem.setProduct(product);
+            newOrderItem.setSubtotal(subTotal);
+            newOrderItem.setQuantity(orderItem.getQuantity());
+
+            OrderItem saved = orderItemRepository.save(newOrderItem);
+
+            orderItems.add(saved);
+        });
+        double sum = orderItems.stream().mapToDouble(OrderItem::getSubtotal).sum();
         // Create Order
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
-        order.setTotalAmount(orderDTO.getProducts().stream().mapToDouble(OrderItemDTO::getSubtotal).sum());
-        
-        Order savedOrder = orderRepository.save(order);
-        
+        order.setTotalAmount(sum);
         order.setCustomer(customer);
+        order.getOrderItems().addAll(orderItems);
+
+        Order savedOrder = orderRepository.save(order);
+
         // Create Order Items
-        ArrayList<OrderItem> orderItems = createOrderItems(orderDTO.getProducts(), savedOrder);
+//        ArrayList<OrderItem> orderItems = createOrderItems(orderDTO.getProducts(), savedOrder);
 
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
         orderResponseDTO.setCustomerId(customer.getId());
-        orderResponseDTO.setOrderDate(LocalDateTime.now());
+        orderResponseDTO.setOrderDate(savedOrder.getOrderDate());
         orderResponseDTO.setTotalAmount(savedOrder.getTotalAmount());
         orderResponseDTO.setOrderItems(orderItems);
 
-
         return orderResponseDTO;
     }
-
-    public ArrayList<OrderItem> createOrderItems(ArrayList<OrderItemDTO> orderItemDTOs, Order order) {
-        
-        List<OrderItem> orderItems = orderItemDTOs.stream().map((OrderItemDTO orderItemDTO) -> {
-            Product product = productService.getProductById(orderItemDTO.getProductId());
-            return orderItemService.createOrderItem(orderItemDTO, product, order);
-        }).collect(Collectors.toList());
-
-        ArrayList<OrderItem> savedOrderItems = new ArrayList<>(orderItems);
-
-        return savedOrderItems;
-
-    }
-        
 }
-

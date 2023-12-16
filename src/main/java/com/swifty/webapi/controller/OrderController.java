@@ -18,10 +18,12 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<Object> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
-        Object createdOrder = orderService.createOrder(orderRequestDTO);
-        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
+    public OrderResponseDTO createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+        OrderResponseDTO createdOrder = orderService.createOrder(orderRequestDTO);
+//        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
+        return createdOrder;
     }
+
 
     @GetMapping
     public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
