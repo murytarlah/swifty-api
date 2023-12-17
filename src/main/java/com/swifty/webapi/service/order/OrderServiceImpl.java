@@ -1,6 +1,6 @@
-package com.swifty.webapi.service;
+package com.swifty.webapi.service.order;
 
-import com.swifty.webapi.repository.OrderItemRepository;
+import com.swifty.webapi.service.user.UserService;
 import org.springframework.stereotype.Service;
 import lombok.*;
 import com.swifty.webapi.repository.OrderRepository;
@@ -10,7 +10,6 @@ import com.swifty.webapi.dto.OrderResponseDTO;
 import com.swifty.webapi.model.Order;
 import com.swifty.webapi.model.User;
 import com.swifty.webapi.model.OrderItem;
-import com.swifty.webapi.model.Product;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,34 +17,30 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class OrderService {
+public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final OrderItemService orderItemService;
     private final UserService userService;
-    private final ProductService productService;
-    private final OrderItemRepository orderItemRepository;
 
     public OrderResponseDTO createOrder(OrderRequestDTO orderDTO) {
-        // Get Customer
-        User user = userService.getCustomer(orderDTO.getCustomerId());
-        List<OrderItem> orderItems = new ArrayList<>();
-        orderDTO.getProducts().forEach(orderItem -> {
-            Product product = productService.getProductById(orderItem.getProductId());
-
-            double subTotal = product.getPrice() * orderItem.getQuantity();
-            OrderItem newOrderItem = new OrderItem();
-
-            newOrderItem.setProduct(product);
-            newOrderItem.setSubtotal(subTotal);
-            newOrderItem.setQuantity(orderItem.getQuantity());
-
-            OrderItem saved = orderItemRepository.save(newOrderItem);
-
-            orderItems.add(saved);
-        });
-        double sum = orderItems.stream().mapToDouble(OrderItem::getSubtotal).sum();
         // Create Order
         Order order = new Order();
+
+        // Get user
+        User user = userService.getUser(orderDTO.getCustomerId());
+
+        // create list to store order-items for order
+        List<OrderItem> orderItems = new ArrayList<>();
+        orderDTO.getProducts().forEach(orderItem -> {
+            // create order-item
+            OrderItem savedItem = orderItemService.createOrderItem(orderItem);
+
+            // add order-item to list of order-items
+            orderItems.add(savedItem);
+        });
+        // calculate the total amount for the order
+        double sum = orderItems.stream().mapToDouble(OrderItem::getSubtotal).sum();
+
         order.setOrderDate(LocalDateTime.now());
         order.setTotalAmount(sum);
         order.setUser(user);
@@ -53,9 +48,7 @@ public class OrderService {
 
         Order savedOrder = orderRepository.save(order);
 
-        // Create Order Items
-//        ArrayList<OrderItem> orderItems = createOrderItems(orderDTO.getProducts(), savedOrder);
-
+        // create order response object and return it
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
         orderResponseDTO.setCustomerId(user.getId());
         orderResponseDTO.setOrderDate(savedOrder.getOrderDate());

@@ -1,4 +1,4 @@
-package com.swifty.webapi.service;
+package com.swifty.webapi.service.product;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ import com.swifty.webapi.model.Product;
 
 @Service
 @AllArgsConstructor
-public class ProductService {    
+public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     public Product createProduct(ProductDTO productDTO) {

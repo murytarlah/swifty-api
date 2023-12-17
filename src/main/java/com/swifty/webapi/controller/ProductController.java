@@ -1,9 +1,9 @@
 package com.swifty.webapi.controller;
 
+import com.swifty.webapi.service.product.ProductService;
 import lombok.AllArgsConstructor;
 import com.swifty.webapi.dto.ProductDTO;
 import com.swifty.webapi.model.Product;
-import com.swifty.webapi.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

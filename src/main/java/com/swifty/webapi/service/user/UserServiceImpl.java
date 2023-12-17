@@ -1,6 +1,9 @@
-package com.swifty.webapi.service;
+package com.swifty.webapi.service.user;
 
 
+import com.swifty.webapi.dto.ApiResponse;
+import com.swifty.webapi.exception.UserException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import lombok.AllArgsConstructor;
 
@@ -12,7 +15,7 @@ import com.swifty.webapi.dto.UserDTO;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     public User createUser(UserDTO userDTO) {
@@ -28,7 +31,7 @@ public class UserService {
     }
 
     public User getUser(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
+        return userRepository.findById(id).orElseThrow(() -> new ApiResponse<>(HttpStatus"user does not exist"));
     }
 
     public ArrayList<User> getAllUsers() {
