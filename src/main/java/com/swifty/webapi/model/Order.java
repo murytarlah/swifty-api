@@ -13,8 +13,8 @@ import lombok.*;
 
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor @Data
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Table(name = "`order`")
 public class Order {
 
@@ -22,12 +22,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @Column(name = "customerId", nullable = false)
-    // private Long customerId;
-
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id", name = "customer_id")
-    private Customer customer;
+    private User user;
 
     @CreationTimestamp
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

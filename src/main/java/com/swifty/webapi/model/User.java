@@ -5,10 +5,10 @@ import java.util.List;
 import lombok.*;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor @Data
-@Table(name = "customer")
-public class Customer {
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@Table(name = "user")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class Customer {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "user")
     private List<Order> orders;
 }
 

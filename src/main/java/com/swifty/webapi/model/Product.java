@@ -6,8 +6,8 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor @Data
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Table(name = "product")
 public class Product {
 

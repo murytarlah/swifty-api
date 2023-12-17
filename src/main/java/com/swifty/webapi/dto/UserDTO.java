@@ -3,7 +3,7 @@ package com.swifty.webapi.dto;
 import lombok.Data;
 
 @Data
-public class CustomerDTO {
+public class UserDTO {
     private String name;
     private String email;
     private String address;
