@@ -1,13 +1,13 @@
 package com.swifty.webapi.service.user;
 
 
-import com.swifty.webapi.dto.ApiResponse;
 import com.swifty.webapi.exception.UserException;
-import org.springframework.http.HttpStatus;
+import com.swifty.webapi.model.Order;
+import com.swifty.webapi.service.order.OrderService;
 import org.springframework.stereotype.Service;
 import lombok.AllArgsConstructor;
 
-import java.util.ArrayList;
+import java.util.List;
 import com.swifty.webapi.repository.UserRepository;
 import com.swifty.webapi.model.User;
 import com.swifty.webapi.dto.UserDTO;
@@ -17,7 +17,7 @@ import com.swifty.webapi.dto.UserDTO;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-
+    @Override
     public User createUser(UserDTO userDTO) {
 
         User user = new User();
@@ -29,18 +29,20 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.save(user);
     }
-
+    @Override
     public User getUser(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new ApiResponse<>(HttpStatus"user does not exist"));
+        return userRepository.findById(id).orElseThrow(() -> new UserException("User not found"));
     }
 
-    public ArrayList<User> getAllUsers() {
-        return (ArrayList<User>) userRepository.findAll();
+    @Override
+    public List<User> getAllUsers() {
+	    return userRepository.findAll();
     }
 
+    @Override
     public User updateUser(UserDTO userDTO, Long id) {
 
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new UserException("User not found"));
 
         user.setName(userDTO.getName());
         user.setAddress(userDTO.getAddress());
@@ -50,10 +52,18 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Override
     public User deleteUser(Long id) {
-        User user = userRepository.findById(id).get();
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new UserException("User not found"));
+        userRepository.delete(user);
         return user;
+    }
+
+    @Override
+    public List<Order> getUserOrders(Long id){
+        User user = userRepository.findById(id).orElseThrow(()-> new UserException("user not found"));
+
+        return user.getOrders();
     }
 
 }

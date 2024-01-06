@@ -1,5 +1,6 @@
 package com.swifty.webapi.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.*;
@@ -26,6 +27,7 @@ public class User {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+//    @JsonBackReference
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
 }

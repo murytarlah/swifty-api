@@ -8,5 +8,5 @@ import java.util.ArrayList;
 @NoArgsConstructor
 public class OrderRequestDTO {
     private Long customerId;
-    private ArrayList<OrderItemDTO> products;
+    private ArrayList<OrderItemRequestDTO> products;
 }

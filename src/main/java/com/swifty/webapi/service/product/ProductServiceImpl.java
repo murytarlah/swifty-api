@@ -1,7 +1,8 @@
 package com.swifty.webapi.service.product;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import com.swifty.webapi.exception.ProductException;
 import org.springframework.stereotype.Service;
 import lombok.*;
 
@@ -15,6 +16,7 @@ import com.swifty.webapi.model.Product;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
+    @Override
     public Product createProduct(ProductDTO productDTO) {
 
         Product product = new Product();
@@ -27,17 +29,22 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(product);
     }
 
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+    @Override
+    public Product getProduct(Long id) {
+        return productRepository.findById(id).orElseThrow(() -> new ProductException("Product not found"));
     }
 
-    public ArrayList<Product> getAllProducts() {
-        return (ArrayList<Product>) productRepository.findAll();
+    @Override
+    public List<Product> getAllProducts() {
+        List<Product> allProducts = productRepository.findAll();
+
+        return allProducts;
     }
 
+    @Override
     public Product updateProduct(ProductDTO productDTO, Long id) {
 
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductException("Product not found"));
 
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
@@ -47,8 +54,9 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(product);
     }
 
+    @Override
     public Product deleteProduct(Long id) {
-        Product product = productRepository.findById(id).get();
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductException("Product not found"));
         productRepository.deleteById(id);
         return product;
     }

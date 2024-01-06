@@ -23,7 +23,7 @@ public class Product {
 
     private Integer stockQuantity;
 
-    @OneToMany(mappedBy = "product")
-    private List<OrderItem> orderItems;
+//    @OneToMany(mappedBy = "product")
+//    private List<OrderItem> orderItems;
 }
 

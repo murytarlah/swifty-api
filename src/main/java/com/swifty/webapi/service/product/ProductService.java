@@ -3,16 +3,16 @@ package com.swifty.webapi.service.product;
 import com.swifty.webapi.dto.ProductDTO;
 import com.swifty.webapi.model.Product;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface ProductService {
-	public Product createProduct(ProductDTO productDTO);
+	Product createProduct(ProductDTO productDTO);
 
-	public Product getProductById(Long id);
+	Product getProduct(Long id);
 
-	public ArrayList<Product> getAllProducts();
+	List<Product> getAllProducts();
 
-	public Product updateProduct(ProductDTO productDTO, Long id);
+	Product updateProduct(ProductDTO productDTO, Long id);
 
-	public Product deleteProduct(Long id);
+	Product deleteProduct(Long id);
 }

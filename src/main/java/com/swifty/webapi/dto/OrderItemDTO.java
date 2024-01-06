@@ -10,5 +10,4 @@ public class OrderItemDTO {
     @NonNull private Long productId;
     @NonNull private Integer quantity;
     private Double subtotal;
-
 }

@@ -1,18 +1,21 @@
 package com.swifty.webapi.service.user;
 
 import com.swifty.webapi.dto.UserDTO;
+import com.swifty.webapi.model.Order;
 import com.swifty.webapi.model.User;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface UserService {
-	public User createUser(UserDTO userDTO);
+	User createUser(UserDTO userDTO);
 
-	public User getUser(Long id);
+	User getUser(Long id);
 
-	public ArrayList<User> getAllUsers();
+	List<User> getAllUsers();
 
-	public User updateUser(UserDTO userDTO, Long id);
+	User updateUser(UserDTO userDTO, Long id);
 
-	public User deleteUser(Long id);
+	User deleteUser(Long id);
+
+	List<Order> getUserOrders(Long id);
 }

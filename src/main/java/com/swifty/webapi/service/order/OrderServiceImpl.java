@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
-    private final OrderItemService orderItemService;
+    private final OrderItemServiceImpl orderItemService;
     private final UserService userService;
 
     public OrderResponseDTO createOrder(OrderRequestDTO orderDTO) {
@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService{
         List<OrderItem> orderItems = new ArrayList<>();
         orderDTO.getProducts().forEach(orderItem -> {
             // create order-item
-            OrderItem savedItem = orderItemService.createOrderItem(orderItem);
+            OrderItem savedItem = orderItemService.createOrderItem(orderItem, order);
 
             // add order-item to list of order-items
             orderItems.add(savedItem);
@@ -44,7 +44,9 @@ public class OrderServiceImpl implements OrderService{
         order.setOrderDate(LocalDateTime.now());
         order.setTotalAmount(sum);
         order.setUser(user);
-        order.getOrderItems().addAll(orderItems);
+//        order.getOrderItems().addAll(orderItems);
+        order.setOrderItems(orderItems);
+
 
         Order savedOrder = orderRepository.save(order);
 
@@ -53,8 +55,12 @@ public class OrderServiceImpl implements OrderService{
         orderResponseDTO.setCustomerId(user.getId());
         orderResponseDTO.setOrderDate(savedOrder.getOrderDate());
         orderResponseDTO.setTotalAmount(savedOrder.getTotalAmount());
-        orderResponseDTO.setOrderItems(orderItems);
+        orderResponseDTO.setOrderItems(savedOrder.getOrderItems());
 
         return orderResponseDTO;
+    }
+
+    public Order getOrder(Long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
     }
 }
